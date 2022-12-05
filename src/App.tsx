@@ -1,3 +1,5 @@
+import Input from "./reusable/Input";
+
 // Array of construction projects
 const projects = [
   {
@@ -19,16 +21,21 @@ type Project = {
 };
 
 export default function App() {
-  function renderProject(project: Project) {
-    return <li key={project.id}>{project.name}</li>;
-  }
+  // function renderProject(project: Project) {
+  //   return <li key={project.id}>{project.name}</li>;
+  // }
 
   return (
     <>
       <h1>Projects</h1>
+      <form>
+        <h2>Add Project</h2>
+        <Input label="Name" id="name" />
+        <Input label="Description" id="description" />
+      </form>
       <ul>
-        {projects.map((p) => (
-          <li key={p.id}>{p.name}</li>
+        {projects.map((project) => (
+          <li key={project.id}>{project.name}</li>
         ))}
       </ul>
     </>
