@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Input from "./reusable/Input";
 
-interface Project extends NewProject {
+export interface Project extends NewProject {
   id: number;
 }
 
