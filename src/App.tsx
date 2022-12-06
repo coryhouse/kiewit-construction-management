@@ -72,10 +72,16 @@ export default function App() {
       <li key={project.id}>
         <button
           onClick={async () => {
-            deleteProject(project.id);
-            // Option 1: Update local state to reflect the deletion.
-            setProjects(projects.filter((p) => p.id !== project.id));
-            toast.success(project.name + " deleted");
+            const currentProjects = [...projects]; // Copy current projects so we can rollback if the delete fails
+            try {
+              setProjects(projects.filter((p) => p.id !== project.id));
+              await deleteProject(project.id);
+              // Option 1: Update local state to reflect the deletion.
+              toast.success(project.name + " deleted");
+            } catch (error) {
+              setProjects(currentProjects);
+              toast.error("Error deleting " + project.name);
+            }
 
             // Option 2: Fetch the updated list of projects from the server.
             // const allProjects = await getProjects();
