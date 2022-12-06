@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "./reusable/Input";
+import { getProjects } from "./services/projectService";
 
 export interface Project extends NewProject {
   id: number;
@@ -25,6 +26,15 @@ export default function App() {
   const [project, setProject] = useState(newProject);
   const [projects, setProjects] = useState<Project[]>([]);
   const [errors, setErrors] = useState<Errors>({});
+
+  useEffect(() => {
+    async function getAllProjects() {
+      const projectsResponse = await getProjects();
+      setProjects(projectsResponse);
+    }
+    getAllProjects();
+    // Empty dependency list below means "Run this effect once after the first render."
+  }, []);
 
   // function renderProject(project: Project) {
   //   return <li key={project.id}>{project.name}</li>;
