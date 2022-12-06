@@ -1,0 +1,14 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "Lenexa Nuclear Power Plant",
+      "description": "It's a nuke."
+    },
+    {
+      "id": 2,
+      "name": "Clean Coal Plant",
+      "description": "It's kinda clean - in theory"
+    }
+  ]
+}
