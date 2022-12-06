@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import Project from "./Project";
+import ErrorBoundary from "./reusable/ErrorBoundary";
 import Input from "./reusable/Input";
 import Spinner from "./reusable/Spinner";
-import { deleteProject, getProjects } from "./services/projectService";
+import { getProjects } from "./services/projectService";
 
 export interface Project extends NewProject {
   id: number;
@@ -66,58 +67,46 @@ export default function App() {
   }
 
   function renderProjects() {
+    // throw new Error("oops");
     if (loading) return <Spinner />;
 
     return projects.map((project) => (
-      <li key={project.id}>
-        <button
-          onClick={async () => {
-            const currentProjects = [...projects]; // Copy current projects so we can rollback if the delete fails
-            try {
-              setProjects(projects.filter((p) => p.id !== project.id));
-              await deleteProject(project.id);
-              // Option 1: Update local state to reflect the deletion.
-              toast.success(project.name + " deleted");
-            } catch (error) {
-              setProjects(currentProjects);
-              toast.error("Error deleting " + project.name);
-            }
-
-            // Option 2: Fetch the updated list of projects from the server.
-            // const allProjects = await getProjects();
-            // setProjects(allProjects);
-          }}
-          aria-label={"Delete " + project.name}
-        >
-          Delete
-        </button>
-        {project.name}
-      </li>
+      <Project
+        key={project.id}
+        project={project}
+        projects={projects}
+        setProjects={setProjects}
+      />
     ));
   }
 
   return (
     <>
       <h1>Projects</h1>
-      <form onSubmit={onSubmit}>
-        <h2>Add Project</h2>
-        <Input
-          label="Name"
-          id="name"
-          value={project.name}
-          onChange={onChange}
-          error={errors.name}
-        />
-        <Input
-          label="Description"
-          id="description"
-          value={project.description}
-          onChange={onChange}
-          error={errors.description}
-        />
-        <button type="submit">Add Project</button>
-      </form>
-      <ul>{renderProjects()}</ul>
+      <ErrorBoundary>
+        <form onSubmit={onSubmit}>
+          <h2>Add Project</h2>
+          <Input
+            label="Name"
+            id="name"
+            value={project.name}
+            onChange={onChange}
+            error={errors.name}
+          />
+          <Input
+            label="Description"
+            id="description"
+            value={project.description}
+            onChange={onChange}
+            error={errors.description}
+          />
+          <button type="submit">Add Project</button>
+        </form>
+      </ErrorBoundary>
+
+      <ErrorBoundary>
+        <ul>{renderProjects()}</ul>
+      </ErrorBoundary>
     </>
   );
 }
