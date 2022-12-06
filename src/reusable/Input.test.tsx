@@ -13,10 +13,11 @@ it("should render an input with the provided value", () => {
   expect(screen.getByRole("textbox", { name: "My Label" })).toHaveValue("val");
 });
 
-it("should fire the onChange handler on keypress", () => {
+it("should fire the onChange handler on keypress", async () => {
   const onChange = vi.fn();
   render(<Input label="My Label" id="id" value="val" onChange={onChange} />);
-  screen.getByLabelText("My Label").focus();
-  userEvent.keyboard("a");
+  await userEvent.type(screen.getByLabelText("My Label"), "a");
   expect(onChange).toHaveBeenCalledTimes(1);
 });
+
+// Exercise 1: Write a test that verifies that the input type is text by default
