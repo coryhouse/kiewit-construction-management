@@ -20,4 +20,20 @@ it("should fire the onChange handler on keypress", async () => {
   expect(onChange).toHaveBeenCalledTimes(1);
 });
 
-// Exercise 1: Write a test that verifies that the input type is text by default
+it("should render a text input by default", () => {
+  render(<Input label="My Label" id="id" value="val" onChange={() => {}} />);
+  expect(screen.getByLabelText("My Label")).toHaveAttribute("type", "text");
+});
+
+it("should render a password input when passed a type of password", () => {
+  render(
+    <Input
+      label="My Label"
+      id="id"
+      value="val"
+      onChange={() => {}}
+      type="password"
+    />
+  );
+  expect(screen.getByLabelText("My Label")).toHaveAttribute("type", "password");
+});
