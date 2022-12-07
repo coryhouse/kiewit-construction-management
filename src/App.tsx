@@ -11,7 +11,13 @@ export default function App() {
       <Nav />
       <Routes>
         <Route path="/" element={<Projects />} />
-        <Route path="/projects/:projectId" element={<ManageProject />} />
+
+        {/* Add route */}
+        <Route path="/manage-project" element={<ManageProject />} />
+
+        {/* Edit route */}
+        <Route path="/manage-project/:projectId" element={<ManageProject />} />
+
         <Route path="/about" element={<About />} />
         <Route path="*" element={<PageNotFound />} />
       </Routes>
