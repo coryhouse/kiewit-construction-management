@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Input from "./reusable/Input";
+import Spinner from "./reusable/Spinner";
+import { getProjectById } from "./services/projectService";
 import { ErrorWithMessage, toErrorWithMessage } from "./utils/errorUtils";
 
 // Contains an optional property for storing the validation error message for each field
@@ -19,11 +22,23 @@ const newProject: NewProject = {
 };
 
 export default function ManageProject() {
+  const { projectId } = useParams<{ projectId: string }>();
   const [project, setProject] = useState(newProject);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
     {}
   );
   const [appError, setAppError] = useState<ErrorWithMessage | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function getProject() {
+      if (!projectId) return; // return early if there's no projectId (i.e. we're on the "Add Project" page)
+      const res = await getProjectById(Number(projectId));
+      setProject(res);
+      setLoading(false);
+    }
+    getProject();
+  }, []);
 
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     setProject({ ...project, [event.target.id]: event.target.value });
@@ -54,25 +69,30 @@ export default function ManageProject() {
 
   return (
     <>
-      <h1>Manage Project</h1>{" "}
-      <form onSubmit={onSubmit}>
-        <h2>Add Project</h2>
-        <Input
-          label="Name"
-          id="name"
-          value={project.name}
-          onChange={onChange}
-          error={validationErrors.name}
-        />
-        <Input
-          label="Description"
-          id="description"
-          value={project.description}
-          onChange={onChange}
-          error={validationErrors.description}
-        />
-        <button type="submit">Add Project</button>
-      </form>
+      <h1>Manage Project</h1>
+
+      {loading ? (
+        <Spinner />
+      ) : (
+        <form onSubmit={onSubmit}>
+          <h2>Add Project</h2>
+          <Input
+            label="Name"
+            id="name"
+            value={project.name}
+            onChange={onChange}
+            error={validationErrors.name}
+          />
+          <Input
+            label="Description"
+            id="description"
+            value={project.description}
+            onChange={onChange}
+            error={validationErrors.description}
+          />
+          <button type="submit">Add Project</button>
+        </form>
+      )}
     </>
   );
 }

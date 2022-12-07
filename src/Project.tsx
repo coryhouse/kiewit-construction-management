@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
 // Using the type keyword to resolve naming collision.
 import { Project as ProjectType } from "./Projects";
 import { deleteProject } from "./services/projectService";
@@ -39,7 +40,9 @@ export default function Project({
           Delete
         </button>
       </td>
-      <td>{project.name}</td>
+      <td>
+        <Link to={"/projects/" + project.id}>{project.name}</Link>
+      </td>
       <td>{project.description}</td>
     </tr>
   );
