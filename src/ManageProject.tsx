@@ -8,7 +8,7 @@ type ValidationErrors = {
   description?: string;
 };
 
-interface NewProject {
+export interface NewProject {
   name: string;
   description: string;
 }
