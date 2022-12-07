@@ -1,12 +1,12 @@
 import toast from "react-hot-toast";
 // Using the type keyword to resolve naming collision.
-import { type Project } from "./App";
+import { Project as ProjectType } from "./App";
 import { deleteProject } from "./services/projectService";
 
 type ProjectProps = {
-  project: Project;
-  projects: Project[];
-  setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+  project: ProjectType;
+  projects: ProjectType[];
+  setProjects: React.Dispatch<React.SetStateAction<ProjectType[]>>;
 };
 
 export default function Project({
