@@ -30,6 +30,10 @@ export default function ManageProject() {
   const [appError, setAppError] = useState<ErrorWithMessage | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Derived state
+  const isEditing = Boolean(projectId);
+  const formVerb = isEditing ? "Edit" : "Add";
+
   useEffect(() => {
     async function getProject() {
       if (!projectId) return; // return early if there's no projectId (i.e. we're on the "Add Project" page)
@@ -75,7 +79,7 @@ export default function ManageProject() {
         <Spinner />
       ) : (
         <form onSubmit={onSubmit}>
-          <h2>Add Project</h2>
+          <h2>{formVerb} Project</h2>
           <Input
             label="Name"
             id="name"
@@ -90,7 +94,7 @@ export default function ManageProject() {
             onChange={onChange}
             error={validationErrors.description}
           />
-          <button type="submit">Add Project</button>
+          <button type="submit">{formVerb} Project</button>
         </form>
       )}
     </>
