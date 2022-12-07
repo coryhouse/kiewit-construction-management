@@ -5,11 +5,15 @@ import {
 
 type ErrorBoundaryProps = {
   children: React.ReactNode;
+  FallbackComponent?: React.ComponentType<FallbackProps>;
 };
 
-export default function ErrorBoundary({ children }: ErrorBoundaryProps) {
+export default function ErrorBoundary({
+  children,
+  FallbackComponent = ErrorFallback,
+}: ErrorBoundaryProps) {
   return (
-    <ReactErrorBoundary FallbackComponent={ErrorFallback}>
+    <ReactErrorBoundary FallbackComponent={FallbackComponent}>
       {children}
     </ReactErrorBoundary>
   );
