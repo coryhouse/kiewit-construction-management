@@ -78,14 +78,27 @@ export default function Projects() {
   function renderProjects() {
     if (loading) return <Spinner />;
 
-    return projects.map((project) => (
-      <Project
-        key={project.id}
-        project={project}
-        projects={projects}
-        setProjects={setProjects}
-      />
-    ));
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Name</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {projects.map((project) => (
+            <Project
+              key={project.id}
+              project={project}
+              projects={projects}
+              setProjects={setProjects}
+            />
+          ))}
+        </tbody>
+      </table>
+    );
   }
 
   if (appError) throw appError;
@@ -115,7 +128,7 @@ export default function Projects() {
       </ErrorBoundary>
 
       <ErrorBoundary FallbackComponent={ProjectListErrorFallback}>
-        <ul>{renderProjects()}</ul>
+        {renderProjects()}
       </ErrorBoundary>
     </>
   );
