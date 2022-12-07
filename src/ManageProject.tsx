@@ -43,7 +43,7 @@ export default function ManageProject() {
       event.preventDefault();
       const formIsValid = Object.keys(validate()).length === 0; // it's valid if validate returns an empty object
       if (!formIsValid) return; // return early if the form is invalid
-      setProjects([...projects, { ...project, id: projects.length + 1 }]);
+      //   setProjects([...projects, { ...project, id: projects.length + 1 }]);
       setProject(newProject);
     } catch (err) {
       setAppError(toErrorWithMessage(err));
