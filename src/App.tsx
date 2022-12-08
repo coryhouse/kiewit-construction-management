@@ -1,10 +1,14 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
 import About from "./About";
-import ManageProject from "./ManageProject";
 import Nav from "./Nav";
 import PageNotFound from "./PageNotFound";
 import Projects from "./Projects";
 import ErrorBoundary from "./reusable/ErrorBoundary";
+import Spinner from "./reusable/Spinner";
+
+// Lazy load ManageProject component
+const ManageProject = lazy(() => import("./ManageProject"));
 
 export default function App() {
   return (
@@ -24,9 +28,11 @@ export default function App() {
         <Route
           path="/manage-project"
           element={
-            <ErrorBoundary>
-              <ManageProject />
-            </ErrorBoundary>
+            <Suspense fallback={<Spinner />}>
+              <ErrorBoundary>
+                <ManageProject />
+              </ErrorBoundary>
+            </Suspense>
           }
         />
 
