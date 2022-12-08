@@ -1,8 +1,14 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { Project } from "./Projects";
 import Input from "./reusable/Input";
 import Spinner from "./reusable/Spinner";
-import { getProjectById } from "./services/projectService";
+import {
+  createProject,
+  editProject,
+  getProjectById,
+} from "./services/projectService";
 import { ErrorWithMessage, toErrorWithMessage } from "./utils/errorUtils";
 
 // Contains an optional property for storing the validation error message for each field
@@ -23,7 +29,7 @@ const newProject: NewProject = {
 
 export default function ManageProject() {
   const { projectId } = useParams<{ projectId: string }>();
-  const [project, setProject] = useState(newProject);
+  const [project, setProject] = useState<Project | NewProject>(newProject);
   const [validationErrors, setValidationErrors] = useState<ValidationErrors>(
     {}
   );
@@ -31,12 +37,14 @@ export default function ManageProject() {
   const [loading, setLoading] = useState(true);
 
   // Derived state
-  const isEditing = Boolean(projectId);
-  const formVerb = isEditing ? "Edit" : "Add";
+  const formVerb = Boolean(projectId) ? "Edit" : "Add";
 
   useEffect(() => {
     async function getProject() {
-      if (!projectId) return; // return early if there's no projectId (i.e. we're on the "Add Project" page)
+      if (!projectId) {
+        setLoading(false);
+        return; // return early if there's no projectId (i.e. we're on the "Add Project" page)
+      }
       const res = await getProjectById(Number(projectId));
       setProject(res);
       setLoading(false);
@@ -57,15 +65,20 @@ export default function ManageProject() {
     return _errors;
   }
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     try {
       event.preventDefault();
       const formIsValid = Object.keys(validate()).length === 0; // it's valid if validate returns an empty object
       if (!formIsValid) return; // return early if the form is invalid
-      //   setProjects([...projects, { ...project, id: projects.length + 1 }]);
+      // If there's an id property on the project, then we're editing an existing project
+      "id" in project
+        ? await editProject(project)
+        : await createProject(project);
       setProject(newProject);
+      toast.success("Project saved");
     } catch (err) {
-      setAppError(toErrorWithMessage(err));
+      toast.error("Error saving project");
+      // setAppError(toErrorWithMessage(err));
     }
   }
 
