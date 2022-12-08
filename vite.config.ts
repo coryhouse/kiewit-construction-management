@@ -12,4 +12,12 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: "./src/test/setup.ts",
   },
+  resolve: {
+    alias: [
+      {
+        find: /^~(.*)$/,
+        replacement: "node_modules/$1",
+      },
+    ],
+  },
 });
