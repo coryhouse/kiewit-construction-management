@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { FallbackProps } from "react-error-boundary";
+import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { NewProject } from "./ManageProject";
 import Project from "./Project";
 import ErrorBoundary from "./reusable/ErrorBoundary";
 import Spinner from "./reusable/Spinner";
 import { getProjects } from "./services/projectService";
+import { ErrorWithMessage, toErrorWithMessage } from "./utils/errorUtils";
 
 export interface Project extends NewProject {
   id: number;
@@ -15,12 +17,21 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   const [loading, setLoading] = useState(true);
+  const [appError, setAppError] = useState<ErrorWithMessage | null>(null);
 
   useEffect(() => {
     async function getAllProjects() {
-      const projectsResponse = await getProjects();
-      setLoading(false);
-      setProjects(projectsResponse);
+      try {
+        const projectsResponse = await getProjects();
+        setProjects(projectsResponse);
+      } catch (err) {
+        toast.error("Failed to load projects.");
+        // Set error in state so that the error boundary can catch it.
+        // We can't throw an error here because we're are in an async function and error boundaries don't apply here.
+        setAppError(toErrorWithMessage(err));
+      } finally {
+        setLoading(false);
+      }
     }
     getAllProjects();
     // Empty dependency list below means "Run this effect once after the first render."
@@ -59,6 +70,8 @@ export default function Projects() {
       </>
     );
   }
+
+  if (appError) throw appError;
 
   return (
     <>
