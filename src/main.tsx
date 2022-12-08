@@ -7,6 +7,7 @@ import "./index.css";
 import ErrorBoundary from "./reusable/ErrorBoundary";
 import "@ktg/foundation-components/dist/foundation.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const queryClient = new QueryClient();
 
@@ -15,6 +16,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <ErrorBoundary>
+          <ReactQueryDevtools />
           <Toaster />
           <App />
         </ErrorBoundary>

@@ -7,14 +7,9 @@ import { deleteProject } from "./services/projectService";
 type ProjectProps = {
   project: ProjectType;
   projects: ProjectType[];
-  setProjects: React.Dispatch<React.SetStateAction<ProjectType[]>>;
 };
 
-export default function Project({
-  project,
-  projects,
-  setProjects,
-}: ProjectProps) {
+export default function Project({ project, projects }: ProjectProps) {
   return (
     <tr key={project.id}>
       <td>
@@ -22,12 +17,13 @@ export default function Project({
           onClick={async () => {
             const currentProjects = [...projects]; // Copy current projects so we can rollback if the delete fails
             try {
-              setProjects(projects.filter((p) => p.id !== project.id));
+              // TODO: UseMutation from react-query to mutate the data and update the cache
+              // setProjects(projects.filter((p) => p.id !== project.id));
               await deleteProject(project.id);
               // Option 1: Update local state to reflect the deletion.
               toast.success(project.name + " deleted");
             } catch (error) {
-              setProjects(currentProjects);
+              // setProjects(currentProjects);
               toast.error("Error deleting " + project.name);
             }
 

@@ -1,48 +1,31 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { FallbackProps } from "react-error-boundary";
-import { toast } from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { NewProject } from "./ManageProject";
 import Project from "./Project";
 import ErrorBoundary from "./reusable/ErrorBoundary";
 import Spinner from "./reusable/Spinner";
 import { getProjects } from "./services/projectService";
-import { ErrorWithMessage, toErrorWithMessage } from "./utils/errorUtils";
 
 export interface Project extends NewProject {
   id: number;
 }
 
 export default function Projects() {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  const [loading, setLoading] = useState(true);
-  const [appError, setAppError] = useState<ErrorWithMessage | null>(null);
-
-  useEffect(() => {
-    async function getAllProjects() {
-      try {
-        const projectsResponse = await getProjects();
-        setProjects(projectsResponse);
-      } catch (err) {
-        toast.error("Failed to load projects.");
-        // Set error in state so that the error boundary can catch it.
-        // We can't throw an error here because we're are in an async function and error boundaries don't apply here.
-        setAppError(toErrorWithMessage(err));
-      } finally {
-        setLoading(false);
-      }
-    }
-    getAllProjects();
-    // Empty dependency list below means "Run this effect once after the first render."
-  }, []);
+  const projectsQuery = useQuery({
+    queryKey: ["projects"],
+    queryFn: getProjects,
+    initialData: [],
+    useErrorBoundary: true,
+  });
 
   // function renderProject(project: Project) {
   //   return <li key={project.id}>{project.name}</li>;
   // }
 
   function renderProjects() {
-    if (loading) return <Spinner />;
+    if (projectsQuery.fetchStatus === "fetching" && !projectsQuery.data)
+      return <Spinner />;
 
     return (
       <>
@@ -57,12 +40,11 @@ export default function Projects() {
             </tr>
           </thead>
           <tbody>
-            {projects.map((project) => (
+            {projectsQuery.data.map((project) => (
               <Project
                 key={project.id}
                 project={project}
-                projects={projects}
-                setProjects={setProjects}
+                projects={projectsQuery.data}
               />
             ))}
           </tbody>
@@ -70,8 +52,6 @@ export default function Projects() {
       </>
     );
   }
-
-  if (appError) throw appError;
 
   return (
     <>
