@@ -1,6 +1,18 @@
 type InputProps = {
+  /** Input label
+   *
+   * list of stuff
+   * - one
+   * - two
+   *
+   * More info [here](https://google.com)
+   */
   label: string;
+
+  /** Input id */
   id: string;
+
+  /** Input value */
   value: string;
   type?: "text" | "number" | "email" | "password" | "date";
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
