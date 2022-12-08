@@ -5,14 +5,20 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import ErrorBoundary from "./reusable/ErrorBoundary";
+import "@ktg/foundation-components/dist/foundation.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <BrowserRouter>
-      <ErrorBoundary>
-        <Toaster />
-        <App />
-      </ErrorBoundary>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <ErrorBoundary>
+          <Toaster />
+          <App />
+        </ErrorBoundary>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>
 );
