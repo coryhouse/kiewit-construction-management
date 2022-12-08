@@ -6,10 +6,12 @@
   "scripts": {
     "start": "run-p start-app start-api",
     "start-app": "vite",
-    "start-api": "json-server --watch db.json --port 3001 --delay 2000",
+    "start-api": "json-server --watch db.json --port 3001",
     "test": "vitest",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@ktg/foundation-components": "^3.2.0",
@@ -22,13 +24,22 @@
     "react-router-dom": "^6.4.5"
   },
   "devDependencies": {
+    "@babel/core": "^7.20.5",
     "@playwright/test": "^1.28.1",
+    "@storybook/addon-actions": "^6.5.14",
+    "@storybook/addon-essentials": "^6.5.14",
+    "@storybook/addon-interactions": "^6.5.14",
+    "@storybook/addon-links": "^6.5.14",
+    "@storybook/builder-vite": "^0.2.5",
+    "@storybook/react": "^6.5.14",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
+    "babel-loader": "^8.3.0",
     "cross-env": "^7.0.3",
     "jsdom": "^20.0.3",
     "json-server": "^0.17.1",
