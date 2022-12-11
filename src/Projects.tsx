@@ -15,7 +15,6 @@ export default function Projects() {
   const projectsQuery = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
-    initialData: [],
     useErrorBoundary: true,
   });
 
@@ -24,8 +23,7 @@ export default function Projects() {
   // }
 
   function renderProjects() {
-    if (projectsQuery.fetchStatus === "fetching" && !projectsQuery.data)
-      return <Spinner />;
+    if (!projectsQuery.data) return <Spinner />;
 
     return (
       <>
